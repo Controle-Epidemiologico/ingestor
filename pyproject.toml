@@ -1,0 +1,25 @@
+[project]
+name = "ingestor"
+version = "0.1.0"
+description = "Default template for PDM package"
+authors = [
+    {name = "BruRdgz", email = "bru.rdgz@gmail.com"},
+]
+dependencies = ["duckdb>=1.2.1", "minio>=7.2.15", "pyarrow>=19.0.1", "pandas>=2.2.3", "apache-airflow>=2.7.2", "pydantic>=2.11.1", "pydantic-settings>=2.8.1"]
+requires-python = ">=3.11,<3.13"
+readme = "README.md"
+license = {text = "GPLv3"}
+
+
+[tool.pdm]
+distribution = false
+
+[tool.pdm.scripts]
+up = "docker-compose -f docker/docker-compose.yml up -d"
+down = "docker-compose -f docker/docker-compose.yml down"
+logs = "docker-compose -f docker/docker-compose.yml logs -f"
+dbuild = "docker-compose -f docker/docker-compose.yml build"
+restart = "docker-compose -f docker/docker-compose.yml restart"
+clean = "docker-compose -f docker/docker-compose.yml down -v --remove-orphans"
+minio = "pdm run up minio minio-client"
+airflow = "pdm run up airflow-webserver airflow-scheduler"
