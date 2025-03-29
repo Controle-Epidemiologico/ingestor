@@ -5,7 +5,7 @@ description = "Default template for PDM package"
 authors = [
     {name = "BruRdgz", email = "bru.rdgz@gmail.com"},
 ]
-dependencies = ["duckdb>=1.2.1", "minio>=7.2.15", "pyarrow>=19.0.1", "pandas>=2.2.3", "apache-airflow>=2.7.2", "pydantic>=2.11.1", "pydantic-settings>=2.8.1"]
+dependencies = ["duckdb>=1.2.1", "minio>=7.2.15", "pyarrow>=19.0.1", "pandas>=2.2.3", "apache-airflow>=2.7.2", "pydantic>=2.11.1", "pydantic-settings>=2.8.1", "python-dotenv>=1.1.0"]
 requires-python = ">=3.11,<3.13"
 readme = "README.md"
 license = {text = "GPLv3"}
