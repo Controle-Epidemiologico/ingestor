@@ -172,3 +172,8 @@ cython_debug/
 
 # PyPI configuration file
 .pypirc
+
+# Airflow
+airflow/logs/
+airflow/*.db
+airflow/webserver_config.py
