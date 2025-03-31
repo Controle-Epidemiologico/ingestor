@@ -1,25 +1,113 @@
 [project]
 name = "ingestor"
 version = "0.1.0"
-description = "Default template for PDM package"
+description = "Ingestor de dados para o Controle Epidemiológico"
+readme = "README.md"
 authors = [
     {name = "BruRdgz", email = "bru.rdgz@gmail.com"},
 ]
-dependencies = ["duckdb>=1.2.1", "minio>=7.2.15", "pyarrow>=19.0.1", "pandas>=2.2.3", "apache-airflow>=2.7.2", "pydantic>=2.11.1", "pydantic-settings>=2.8.1", "python-dotenv>=1.1.0"]
 requires-python = ">=3.11,<3.13"
-readme = "README.md"
 license = {text = "GPLv3"}
 
+dependencies = [
+    "pandas==2.2.3",
+    "pyarrow==16.0.0",
+    "duckdb==1.2.1",
+
+    "minio==7.2.5",
+
+    "apache-airflow==2.9.0",
+
+    "pydantic==2.6.1",
+    "pydantic-settings==2.2.1",
+    "python-dotenv==1.0.1"
+]
+
+[project.urls]
+repository = "https://github.com/Controle-Epidemiologico/ingestor"
 
 [tool.pdm]
 distribution = false
 
+[tool.pdm.dev-dependencies]
+docs = [
+    "sphinx==7.2.6",
+    "sphinx-rtd-theme==2.0.0",
+    "releases==2.1.1",
+    "myst-parser==2.0.0"
+]
+
+lint = [
+    "pre-commit==3.6.0",
+    "pyright==1.1.353",
+    "ruff==0.2.2",
+    "mypy==1.8.0",
+]
+
+logs = [
+    "rich==13.7.0",
+    "icecream==2.1.3"
+]
+
+test = [
+    "pytest==7.4.4",
+    "pytest-mock==3.12.0",
+]
+
 [tool.pdm.scripts]
-up = "docker-compose -f docker/docker-compose.yml up -d"
-down = "docker-compose -f docker/docker-compose.yml down"
-logs = "docker-compose -f docker/docker-compose.yml logs -f"
-dbuild = "./scripts/airflow-init.sh"
-restart = "docker-compose -f docker/docker-compose.yml restart"
-clean = "docker-compose -f docker/docker-compose.yml down -v --remove-orphans"
-minio = "pdm run up minio minio-client"
-airflow = "pdm run up airflow-webserver airflow-scheduler"
+dc = { shell = "docker compose -f docker/docker-compose.yml" }
+up = { shell = "docker compose -f docker/docker-compose.yml up -d" }
+down = { shell = "docker compose -f docker/docker-compose.yml down" }
+logs = { shell = "docker compose -f docker/docker-compose.yml logs -f" }
+restart = { shell = "docker compose -f docker/docker-compose.yml restart" }
+clean = { shell = "docker compose -f docker/docker-compose.yml down -v --remove-orphans" }
+airflow-init = { cmd = "./scripts/airflow-init.sh" }
+
+minio = { shell = "pdm run up minio minio-client" }
+airflow = { shell = "pdm run up airflow-webserver airflow-scheduler" }
+start-all = { composite = ["up"] }
+
+format = { shell = "ruff format ." }
+lint = { shell = "pyright && ruff check ." }
+test = { shell = "pytest tests" }
+precommit = { shell = "pre-commit run --all-files" }
+
+install-dev = { shell = "pdm install -G:all" }
+
+check = { composite = ["format", "lint", "test"] }
+
+[tool.ruff]
+line-length = 88
+target-version = "py311"
+select = ["E", "F", "I", "B", "W"]
+ignore = []
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = "test_*.py"
+
+[tool.pyright]
+include = ["src/**/*.py"]
+ignore = ["airflow/", "docker/"]
+venvPath = "."
+venv = ".venv"
+
+reportMissingImports = "error"
+reportUndefinedVariable = "error"
+reportUnusedImport = "error"
+reportUnusedVariable = "error"
+reportDuplicateImport = "error"
+
+strictListInference = true
+strictDictionaryInference = true
+
+reportMissingParameterType = "warning"
+reportUnknownParameterType = "warning"
+reportUnknownMemberType = "warning"
+reportUnknownArgumentType = "warning"
+
+reportPrivateUsage = "warning"
+reportUnknownVariableType = "warning"
+reportUntypedFunctionDecorator = "warning"
+
+reportMissingTypeStubs = "none"
