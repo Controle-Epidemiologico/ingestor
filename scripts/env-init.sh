@@ -37,7 +37,7 @@ check_docker() {
         log_error "Docker não está instalado. Por favor, instale-o primeiro."
         exit 1
     fi
-    
+
     if ! command -v docker compose &> /dev/null; then
         log_warning "Docker Compose V2 não encontrado, tentando o V1..."
         if ! command -v docker-compose &> /dev/null; then
@@ -52,7 +52,7 @@ check_docker() {
 
 check_environment() {
     log_info "Verificando ambiente..."
-    
+
     if [ ! -f "${COMPOSE_FILE}" ]; then
         log_error "Arquivo docker-compose.yml não encontrado em ${COMPOSE_FILE}"
         exit 1
@@ -70,7 +70,7 @@ create_directories() {
 start_postgres() {
     log_info "Iniciando banco de dados PostgreSQL..."
     ${DOCKER_COMPOSE} -f "${COMPOSE_FILE}" up -d postgres
-    
+
     log_info "Aguardando PostgreSQL inicializar (10s)..."
     sleep 10
 
@@ -150,14 +150,14 @@ main() {
     check_docker
     check_environment
     create_directories
-    
+
     start_postgres
     initialize_airflow
     initialize_minio
-    
+
     start_all_services
     check_services_status
-    
+
     log_info "==== Inicialização concluída! ===="
     log_info "Airflow UI: http://localhost:8080"
     log_info "MinIO Console: http://localhost:9001"
