@@ -20,9 +20,9 @@ class DataOrchestrator:
     """
 
     def __init__(
-            self,
-            db_client: Optional[DuckDBClient] = None,
-            storage_client: Optional[MinioClient] = None,
+        self,
+        db_client: Optional[DuckDBClient] = None,
+        storage_client: Optional[MinioClient] = None,
     ):
         """Inicializa o orquestrador com clientes de banco e armazenamento."""
         self.db = db_client or DuckDBClient()
@@ -31,9 +31,9 @@ class DataOrchestrator:
         logger.info("DataOrchestrator inicializado")
 
     def ingest_models_to_database(
-            self,
-            models: list[BaseModel],
-            table_name: str | TableName,
+        self,
+        models: list[BaseModel],
+        table_name: str | TableName,
     ) -> int:
         """
         Ingere modelos Pydantic diretamente no banco de dados.
@@ -57,10 +57,10 @@ class DataOrchestrator:
         return num_inserted
 
     def load_storage_to_database(
-            self,
-            bucket: str,
-            prefix: str,
-            table_name: str | TableName,
+        self,
+        bucket: str,
+        prefix: str,
+        table_name: str | TableName,
     ) -> int:
         """
         Carrega dados do armazenamento para o banco de dados.
@@ -91,11 +91,11 @@ class DataOrchestrator:
         return 0
 
     def export_database_to_storage(
-            self,
-            table_name: str | TableName,
-            bucket: str,
-            path_prefix: str,
-            partition_cols: list[str] = None,
+        self,
+        table_name: str | TableName,
+        bucket: str,
+        path_prefix: str,
+        partition_cols: list[str] = None,
     ) -> str:
         """
         Exporta dados do banco para o armazenamento em formato Parquet.
@@ -121,10 +121,10 @@ class DataOrchestrator:
         return uri
 
     def transform_and_load(
-            self,
-            source_uris: list[str],
-            target_table: str | TableName,
-            transformations: list[Callable[[pd.DataFrame], pd.DataFrame]] = None,
+        self,
+        source_uris: list[str],
+        target_table: str | TableName,
+        transformations: list[Callable[[pd.DataFrame], pd.DataFrame]] = None,
     ) -> int:
         """
         Aplica transformações em dados do storage e carrega no banco.
@@ -160,12 +160,12 @@ class DataOrchestrator:
         return num_inserted
 
     def archive_and_process(
-            self,
-            data_source: list[BaseModel] | pd.DataFrame,
-            process_name: str,
-            target_table: str | TableName,
-            archive_bucket: str,
-            archive_prefix: str,
+        self,
+        data_source: list[BaseModel] | pd.DataFrame,
+        process_name: str,
+        target_table: str | TableName,
+        archive_bucket: str,
+        archive_prefix: str,
     ) -> dict[str, Any]:
         """
         Arquiva dados no storage e processa no banco numa única operação.
@@ -189,9 +189,9 @@ class DataOrchestrator:
         }
 
         if (
-                isinstance(data_source, list)
-                and data_source
-                and isinstance(data_source[0], BaseModel)
+            isinstance(data_source, list)
+            and data_source
+            and isinstance(data_source[0], BaseModel)
         ):
             df = DataTransformer.model_to_dataframe(data_source)
         elif isinstance(data_source, pd.DataFrame):
@@ -217,10 +217,10 @@ class DataOrchestrator:
         return results
 
     def get_models_from_database(
-            self,
-            query_or_table: str | TableName,
-            model_class: Type[BaseModel],
-            filters: dict[str, Any] = None,
+        self,
+        query_or_table: str | TableName,
+        model_class: Type[BaseModel],
+        filters: dict[str, Any] = None,
     ) -> list[BaseModel]:
         """
         Recupera dados do banco e converte para modelos Pydantic.

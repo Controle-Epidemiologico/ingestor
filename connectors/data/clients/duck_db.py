@@ -1,11 +1,12 @@
 from datetime import datetime
-from typing import Optional, Any
+from typing import Any, Optional
 
 import duckdb
 import pandas as pd
 
 from configs.logger import get_logger
-from configs.settings import DuckDB as DuckDBConfig, MinIO as MinIOConfig
+from configs.settings import DuckDB as DuckDBConfig
+from configs.settings import MinIO as MinIOConfig
 from schemas.database import TableName, TableSchema, ViewSchema
 
 logger = get_logger(__name__)
@@ -17,10 +18,10 @@ class DuckDBClient:
     """
 
     def __init__(
-            self,
-            database_path: Optional[str] = None,
-            minio_config: Optional[MinIOConfig] = None,
-            read_only: bool = False,
+        self,
+        database_path: Optional[str] = None,
+        minio_config: Optional[MinIOConfig] = None,
+        read_only: bool = False,
     ):
         """Inicializa o cliente DuckDB."""
         self.database_path = database_path or DuckDBConfig().path
@@ -53,9 +54,9 @@ class DuckDBClient:
             raise
 
     def initialize_schema(
-            self,
-            tables: list[TableSchema],
-            views: list[ViewSchema],
+        self,
+        tables: list[TableSchema],
+        views: list[ViewSchema],
     ) -> None:
         """Inicializa o esquema do banco criando tabelas e views."""
         if self.read_only:
@@ -77,8 +78,8 @@ class DuckDBClient:
             raise
 
     def get_table_columns(
-            self,
-            table_name: str | TableName,
+        self,
+        table_name: str | TableName,
     ) -> list[str]:
         """Retorna a lista de colunas de uma tabela."""
         table = table_name.value if hasattr(table_name, "value") else table_name
@@ -91,8 +92,8 @@ class DuckDBClient:
             raise
 
     def _get_primary_key(
-            self,
-            table_name: str | TableName,
+        self,
+        table_name: str | TableName,
     ) -> Optional[str]:
         """Retorna o nome da coluna de chave primária se existir."""
         table = table_name.value if hasattr(table_name, "value") else table_name
@@ -106,9 +107,9 @@ class DuckDBClient:
             return None
 
     def insert_dataframe(
-            self,
-            table_name: str | TableName,
-            avoid_duplicates: bool = True,
+        self,
+        table_name: str | TableName,
+        avoid_duplicates: bool = True,
     ) -> int:
         """Insere DataFrame em uma tabela, garantindo compatibilidade de esquema.
 
@@ -168,9 +169,9 @@ class DuckDBClient:
             raise
 
     def query_to_dataframe(
-            self,
-            query_or_table: str | TableName,
-            filters: dict[str, Any] = None,
+        self,
+        query_or_table: str | TableName,
+        filters: dict[str, Any] = None,
     ) -> pd.DataFrame:
         """Recupera dados via query SQL ou tabela com filtros.
 
@@ -222,9 +223,9 @@ class DuckDBClient:
             raise
 
     def read_external_parquet(
-            self,
-            uris: list[str],
-            target_table: Optional[TableName] = None,
+        self,
+        uris: list[str],
+        target_table: Optional[TableName] = None,
     ) -> pd.DataFrame:
         """Lê dados de múltiplos arquivos Parquet via URIs S3/MinIO.
 
@@ -265,9 +266,9 @@ class DuckDBClient:
             raise
 
     def create_temporary_table(
-            self,
-            table_name: str,
-            df: pd.DataFrame,
+        self,
+        table_name: str,
+        df: pd.DataFrame,
     ) -> None:
         """Cria uma tabela temporária a partir de um DataFrame."""
         try:
@@ -289,8 +290,8 @@ class DuckDBClient:
             raise
 
     def export_to_dataframe(
-            self,
-            query_or_table: str | TableName,
+        self,
+        query_or_table: str | TableName,
     ) -> pd.DataFrame:
         """Exporta dados para DataFrame."""
         return self.query_to_dataframe(query_or_table)

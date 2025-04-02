@@ -1,5 +1,5 @@
 from datetime import datetime
-from typing import Any, Type, TypeVar, Hashable
+from typing import Any, Hashable, Type, TypeVar
 
 import pandas as pd
 import pyarrow as pa
@@ -34,7 +34,10 @@ class DataTransformer:
         return df
 
     @staticmethod
-    def dataframe_to_models(df: pd.DataFrame, model_class: Type[T], ) -> list[T]:
+    def dataframe_to_models(
+        df: pd.DataFrame,
+        model_class: Type[T],
+    ) -> list[T]:
         """Converte DataFrame para lista de modelos Pydantic."""
         if df.empty:
             logger.warning(
@@ -68,7 +71,9 @@ class DataTransformer:
 
     @staticmethod
     def standardize_columns(
-            df: pd.DataFrame, target_columns: list[str], fill_missing: bool = True,
+        df: pd.DataFrame,
+        target_columns: list[str],
+        fill_missing: bool = True,
     ) -> pd.DataFrame:
         """
         Padroniza colunas de um DataFrame conforme lista alvo.
@@ -115,7 +120,8 @@ class DataTransformer:
 
     @staticmethod
     def apply_schema_validation(
-            df: pd.DataFrame, schema: dict[str, str],
+        df: pd.DataFrame,
+        schema: dict[str, str],
     ) -> pd.DataFrame:
         """
         Aplica validação e conversão de tipos conforme esquema definido.

@@ -1,7 +1,7 @@
 import io
 import uuid
 from datetime import datetime
-from typing import Optional, ClassVar
+from typing import ClassVar, Optional
 
 import pandas as pd
 import pyarrow as pa
@@ -21,8 +21,8 @@ class MinioClient:
     _instances: ClassVar[dict[str, "MinioClient"]] = {}
 
     def __init__(
-            self,
-            config_or_client: MinIOConfig | Minio | None = None,
+        self,
+        config_or_client: MinIOConfig | Minio | None = None,
     ):
         """Inicializa o cliente MinIO."""
         if isinstance(config_or_client, Minio):
@@ -44,8 +44,8 @@ class MinioClient:
 
     @classmethod
     def get_instance(
-            cls,
-            config: Optional[MinIOConfig] = None,
+        cls,
+        config: Optional[MinIOConfig] = None,
     ) -> "MinioClient":
         """Obtém uma instância compartilhada do cliente."""
         config = config or MinIOConfig()
@@ -57,8 +57,8 @@ class MinioClient:
         return cls._instances[cache_key]
 
     def ensure_bucket_exists(
-            self,
-            bucket_name: str,
+        self,
+        bucket_name: str,
     ) -> None:
         """Garante que o bucket exista, criando se necessário."""
         try:
@@ -72,10 +72,10 @@ class MinioClient:
             raise
 
     def list_objects(
-            self,
-            bucket_name: str,
-            prefix: str = "",
-            recursive: bool = True,
+        self,
+        bucket_name: str,
+        prefix: str = "",
+        recursive: bool = True,
     ) -> list[str]:
         """Lista objetos em um bucket com filtro por prefixo."""
         try:
@@ -92,12 +92,12 @@ class MinioClient:
             raise
 
     def upload_object(
-            self,
-            bucket_name: str,
-            object_path: str,
-            data,
-            length: Optional[int] = None,
-            content_type: str = "application/octet-stream",
+        self,
+        bucket_name: str,
+        object_path: str,
+        data,
+        length: Optional[int] = None,
+        content_type: str = "application/octet-stream",
     ) -> str:
         """Faz upload direto de dados para o MinIO e retorna a URI.
 
@@ -133,9 +133,9 @@ class MinioClient:
             raise
 
     def download_object(
-            self,
-            bucket_name: str,
-            object_path: str,
+        self,
+        bucket_name: str,
+        object_path: str,
     ) -> bytes:
         """Baixa um objeto como bytes."""
         try:
@@ -150,9 +150,9 @@ class MinioClient:
             raise
 
     def delete_object(
-            self,
-            bucket_name: str,
-            object_path: str,
+        self,
+        bucket_name: str,
+        object_path: str,
     ) -> None:
         """Remove um objeto do MinIO."""
         try:
@@ -165,11 +165,11 @@ class MinioClient:
             raise
 
     def upload_parquet(
-            self,
-            bucket: str,
-            path: str,
-            dataframe: pd.DataFrame,
-            partition_cols: list[str] = None,
+        self,
+        bucket: str,
+        path: str,
+        dataframe: pd.DataFrame,
+        partition_cols: list[str] = None,
     ) -> str:
         """Converte DataFrame para Parquet e faz upload.
 
@@ -211,11 +211,11 @@ class MinioClient:
             raise
 
     def _create_partitioned_path(
-            self,
-            base_path: str,
-            df: pd.DataFrame,
-            partition_cols: list[str],
-            timestamp: str,
+        self,
+        base_path: str,
+        df: pd.DataFrame,
+        partition_cols: list[str],
+        timestamp: str,
     ) -> str:
         """Cria caminho particionado baseado em colunas do DataFrame."""
         base_path = base_path.rstrip("/")
@@ -233,9 +233,9 @@ class MinioClient:
         return f"{base_path}{partition_path}/{timestamp}_{uuid_str[:8]}.parquet"
 
     def download_parquet(
-            self,
-            bucket: str,
-            path: str,
+        self,
+        bucket: str,
+        path: str,
     ) -> pd.DataFrame:
         """Baixa um arquivo Parquet e converte para DataFrame."""
         try:
@@ -250,9 +250,9 @@ class MinioClient:
             raise
 
     def list_parquet_files(
-            self,
-            bucket: str,
-            prefix: str,
+        self,
+        bucket: str,
+        prefix: str,
     ) -> list[str]:
         """Lista caminhos de arquivos Parquet em um bucket/prefixo."""
         try:
@@ -267,9 +267,9 @@ class MinioClient:
             raise
 
     def get_object_uris(
-            self,
-            bucket: str,
-            prefix: str = "",
+        self,
+        bucket: str,
+        prefix: str = "",
     ) -> list[str]:
         """Retorna URIs S3 completas para objetos.
 
@@ -289,9 +289,9 @@ class MinioClient:
             raise
 
     def get_parquet_uris(
-            self,
-            bucket: str,
-            prefix: str = "",
+        self,
+        bucket: str,
+        prefix: str = "",
     ) -> list[str]:
         """Retorna URIs S3 apenas para arquivos Parquet.
 
@@ -310,9 +310,9 @@ class MinioClient:
             raise
 
     def object_exists(
-            self,
-            bucket: str,
-            path: str,
+        self,
+        bucket: str,
+        path: str,
     ) -> bool:
         """Verifica se um objeto existe no bucket."""
         try:

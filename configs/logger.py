@@ -1,8 +1,8 @@
-import sys
 import logging
+import sys
 from logging.handlers import RotatingFileHandler
 from pathlib import Path
-from typing import Dict, Optional, Union, List, Any
+from typing import Any, Dict, Optional, Union
 
 from configs.settings import Logging as LoggingConfig
 
