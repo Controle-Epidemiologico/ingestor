@@ -29,7 +29,7 @@ class MinIO(
     Configurações do MinIO.
     """
 
-    endpoint: Optional[str] = "minio:9000"
+    endpoint: Optional[str] = "localhost:9000"
     """Endereço do MinIO."""
     access_key: Optional[str] = "minioadmin"
     """Chave de acesso do MinIO."""
@@ -75,5 +75,5 @@ class Logging(
     Configurações de logging.
     """
 
-    level: Optional[str] = "INFO"
+    level: Optional[str] = "DEBUG"
     """Nível de logging."""

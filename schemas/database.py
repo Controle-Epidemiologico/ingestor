@@ -30,8 +30,10 @@ class TableSchema:
                 column_def += " PRIMARY KEY"
             columns_sql.append(column_def)
 
+        table_name = self.name.value if hasattr(self.name, "value") else self.name
+
         return (
-            f"CREATE TABLE IF NOT EXISTS {self.name} (\n"
+            f"CREATE TABLE IF NOT EXISTS {table_name} (\n"
             + ",\n".join(f"  {col}" for col in columns_sql)
             + "\n);"
         )
@@ -48,6 +50,7 @@ class ViewSchema:
         """Gera SQL para criar a view."""
         view_name = self.name.value if hasattr(self.name, "value") else self.name
         return f"CREATE OR REPLACE VIEW {view_name} AS\n{self.query};"
+
 
 AVIAN_CASES_SCHEMA = TableSchema(
     name=TableName.AVIAN_CASES,
